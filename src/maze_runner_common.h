@@ -15,20 +15,20 @@
 #define MAX_RUNNERS   50
 
 struct MazeInfo {
-  int rows;           // rows in maze
-  int cols;           // columns in maze
-  char maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE];  // maze storage
+    int rows;           // rows in maze
+    int cols;           // columns in maze
+    char maze[MAX_MAZE_SIZE][MAX_MAZE_SIZE];  // maze storage
 };
 
 struct RunnerInfo {
-  int nrunners;      // number runners
-  int rloc[MAX_RUNNERS][2];   // runner locations [col][row]
+    int nrunners;      // number runners
+    int rloc[MAX_RUNNERS][2];   // runner locations [col][row]
 };
 
 struct SharedData {
-  MazeInfo minfo;    // maze info
-  RunnerInfo rinfo;  // runner info
-  bool quit;         // tell everyone to quit
+    MazeInfo minfo;    // maze info
+    RunnerInfo rinfo;  // runner info
+    bool quit;         // tell everyone to quit
 };
 
 #endif //LAB4_MAZE_RUNNER_COMMON_H
