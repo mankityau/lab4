@@ -153,6 +153,17 @@ public:
 };
 
 int main() {
+    {
+        cpen333::process::shared_object<SharedData> memory_(MAZE_MEMORY_NAME);
+        cpen333::process::mutex mutex_(MAZE_MUTEX_NAME);
+        std::lock_guard<decltype(mutex_)> lock(mutex_);
+        int expectMagicNumber = MAGIC_NUMBER;
+        if (memory_->magicNumber != expectMagicNumber) {
+            std::cout << "main is not running, exiting...";
+            return -1;
+        }
+    }
+
 
     // initialize previous locations of characters
     MazeUI ui;

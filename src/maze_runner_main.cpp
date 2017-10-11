@@ -6,6 +6,7 @@
 #include <random>
 #include <cpen333/process/shared_memory.h>
 #include <cpen333/process/impl/windows/subprocess.h>
+#include <cpen333/process/mutex.h>
 
 /**
  * Reads a maze from a filename and populates the maze
@@ -78,6 +79,8 @@ int main(int argc, char *argv[]) {
     }
 
     cpen333::process::shared_object<SharedData> memory_(MAZE_MEMORY_NAME);
+    cpen333::process::mutex mutex_(MAZE_MUTEX_NAME);
+
     MazeInfo mazeInfo;
     RunnerInfo runnerInfo;
     load_maze(maze, mazeInfo);
@@ -85,6 +88,10 @@ int main(int argc, char *argv[]) {
     memory_->minfo = mazeInfo;
     memory_->rinfo = runnerInfo;
     memory_->quit = false;
+    {
+        std::lock_guard<decltype(mutex_)> lock(mutex_);
+        memory_->magicNumber = MAGIC_NUMBER;
+    }
 
     std::vector<cpen333::process::subprocess> runners;
     for(int i = 0; i < MAX_RUNNERS; ++i){
