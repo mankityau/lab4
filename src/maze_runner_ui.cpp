@@ -46,10 +46,20 @@ public:
         exit_[COL_IDX] = -1;
         exit_[ROW_IDX] = -1;
 
-        //===========================================================
-        // TODO: SEARCH MAZE FOR EXIT LOCATION
-        //===========================================================
+        {
+            std::lock_guard<decltype(mutex_)> lock(mutex_);
+            bool foundFlag = false;
+            for (int rowIdx = 0; rowIdx < memory_->minfo.rows && !foundFlag; rowIdx ++) {
+                for (int colIdx = 0; colIdx < memory_->minfo.cols && !foundFlag; colIdx ++) {
+                    if (memory_->minfo.maze[colIdx][rowIdx] == EXIT_CHAR) {
+                        exit_[COL_IDX] = colIdx;
+                        exit_[ROW_IDX] = rowIdx;
+                        foundFlag == true;
+                    }
+                }
+            }
 
+        }
     }
 
     /**

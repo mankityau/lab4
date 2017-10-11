@@ -5,6 +5,7 @@
 #include <thread>
 #include <random>
 #include <cpen333/process/shared_memory.h>
+#include <cpen333/process/impl/windows/subprocess.h>
 
 /**
  * Reads a maze from a filename and populates the maze
@@ -76,6 +77,19 @@ int main(int argc, char *argv[]) {
         maze = argv[1];
     }
 
+    cpen333::process::shared_object<SharedData> memory_(MAZE_MEMORY_NAME);
+    MazeInfo mazeInfo;
+    RunnerInfo runnerInfo;
+    load_maze(maze, mazeInfo);
+    init_runners(mazeInfo, runnerInfo);
+    memory_->minfo = mazeInfo;
+    memory_->rinfo = runnerInfo;
+    memory_->quit = false;
+
+    std::vector<cpen333::process::subprocess> runners;
+    for(int i = 0; i < MAX_RUNNERS; ++i){
+        runners.push_back(cpen333::process::subprocess("./maze_runner"));
+    }
     //===============================================================
     //  TODO:  CREATE SHARED MEMORY AND INITIALIZE IT
     //===============================================================
@@ -87,5 +101,7 @@ int main(int argc, char *argv[]) {
     //===============================================================
     //  TODO:  INFORM OTHER PROCESSES TO QUIT
     //===============================================================
+
+    memory_.unlink();
     return 0;
 }
