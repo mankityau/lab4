@@ -70,14 +70,15 @@ public:
      * @return 1 for success, 0 for failure, -1 to quit
      */
     int go() {
-        while (!atExit(loc_[COL_IDX], loc_[ROW_IDX])) {
+        while (!atExit(loc_[COL_IDX], loc_[ROW_IDX]) || !memory_->quit) {
             randomMove();
         }
 
         if (atExit(loc_[COL_IDX], loc_[ROW_IDX])){
             return 1;
-        }
-        else {
+        } else if (memory_->quit){
+            return -1;
+        } else {
             return 0;
         }
         // failed to find exit

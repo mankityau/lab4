@@ -105,6 +105,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Press ENTER to quit." << std::endl;
     std::cin.get();
 
+    memory_->quit = true;
     //===============================================================
     //  TODO:  INFORM OTHER PROCESSES TO QUIT
     //===============================================================
