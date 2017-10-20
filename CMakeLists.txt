@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 project(lab4)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 find_package( Threads REQUIRED )  # Multithreading package required
 
 # add library directory

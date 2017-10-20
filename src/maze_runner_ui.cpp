@@ -46,10 +46,20 @@ public:
         exit_[COL_IDX] = -1;
         exit_[ROW_IDX] = -1;
 
-        //===========================================================
-        // TODO: SEARCH MAZE FOR EXIT LOCATION
-        //===========================================================
+        {
+            std::lock_guard<decltype(mutex_)> lock(mutex_);
+            bool foundFlag = false;
+            for (int rowIdx = 0; rowIdx < memory_->minfo.rows && !foundFlag; rowIdx ++) {
+                for (int colIdx = 0; colIdx < memory_->minfo.cols && !foundFlag; colIdx ++) {
+                    if (memory_->minfo.maze[colIdx][rowIdx] == EXIT_CHAR) {
+                        exit_[COL_IDX] = colIdx;
+                        exit_[ROW_IDX] = rowIdx;
+                        foundFlag == true;
+                    }
+                }
+            }
 
+        }
     }
 
     /**
@@ -143,6 +153,17 @@ public:
 };
 
 int main() {
+    {
+        cpen333::process::shared_object<SharedData> memory_(MAZE_MEMORY_NAME);
+        cpen333::process::mutex mutex_(MAZE_MUTEX_NAME);
+        std::lock_guard<decltype(mutex_)> lock(mutex_);
+        int expectMagicNumber = MAGIC_NUMBER;
+        if (memory_->magicNumber != expectMagicNumber) {
+            std::cout << "main is not running, exiting...";
+            return -1;
+        }
+    }
+
 
     // initialize previous locations of characters
     MazeUI ui;
